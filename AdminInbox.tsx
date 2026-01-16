@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trash2, MessageSquare, ArrowLeft, Calendar, User, Lock, LogIn } from 'lucide-react';
 import { Message } from '../types';
-import { db } from '../firebaseConfig';
+import { db } from './firebaseConfig';
 import { collection, query, orderBy, getDocs, deleteDoc, doc } from 'firebase/firestore';
 
 interface AdminInboxProps {
