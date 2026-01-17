@@ -21,7 +21,6 @@ const AdminInbox: React.FC<AdminInboxProps> = ({ onExit }) => {
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    // Only fetch if authenticated (or trigger fetch after login)
     if (isAuthenticated) {
         fetchMessages();
     }
@@ -30,7 +29,6 @@ const AdminInbox: React.FC<AdminInboxProps> = ({ onExit }) => {
   const fetchMessages = async () => {
     setIsLoading(true);
     try {
-        // Query "Me" collection, ordered by timestamp descending (latest first)
         const q = query(collection(db, "Me"), orderBy("timestamp", "desc"));
         const querySnapshot = await getDocs(q);
         
@@ -39,7 +37,6 @@ const AdminInbox: React.FC<AdminInboxProps> = ({ onExit }) => {
             return {
                 id: docSnapshot.id,
                 sender: data.sender || 'Anonymous',
-                // Map the Firestore field 'Text' to our local type 'text'
                 text: data.Text || '', 
                 timestamp: data.timestamp,
                 dateStr: data.dateStr || new Date(data.timestamp).toLocaleDateString()
@@ -68,7 +65,6 @@ const AdminInbox: React.FC<AdminInboxProps> = ({ onExit }) => {
     if (window.confirm("Are you sure you want to delete this message?")) {
       try {
         await deleteDoc(doc(db, "Me", id));
-        // Remove from local state to update UI instantly
         setMessages(prev => prev.filter(m => m.id !== id));
       } catch (error) {
         console.error("Error deleting document: ", error);
@@ -77,7 +73,6 @@ const AdminInbox: React.FC<AdminInboxProps> = ({ onExit }) => {
     }
   };
 
-  // --- LOGIN SCREEN ---
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4 font-tajawal">
@@ -149,7 +144,6 @@ const AdminInbox: React.FC<AdminInboxProps> = ({ onExit }) => {
     );
   }
 
-  // --- MESSAGES DASHBOARD ---
   return (
     <div className="min-h-screen bg-gray-900/90 text-white p-6 md:p-10 font-tajawal">
       <div className="max-w-4xl mx-auto">
